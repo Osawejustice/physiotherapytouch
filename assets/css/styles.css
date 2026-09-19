@@ -43,6 +43,8 @@ html,
 body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -115,8 +117,9 @@ ul {
 }
 
 .wrap {
-  width: min(calc(100% - 40px), var(--max));
+  width: min(calc(100vw - 40px), var(--max));
   margin-inline: auto;
+  max-width: 100%;
 }
 
 .eyebrow {
@@ -156,6 +159,12 @@ ul {
   color: var(--muted);
   font-size: 1.125rem;
   max-width: 42rem;
+  overflow-wrap: break-word;
+}
+
+h1,
+h2 {
+  overflow-wrap: break-word;
 }
 
 .section {
@@ -412,41 +421,30 @@ ul {
   gap: 10px;
 }
 
+@media (min-width: 981px) {
+  .nav-toggle {
+    display: none;
+  }
+}
+
 .nav-toggle {
-  display: none;
+  display: grid;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--forest);
   border-radius: 12px;
   place-items: center;
-}
-
-.nav-toggle span,
-.nav-toggle span::before,
-.nav-toggle span::after {
-  display: block;
-  width: 18px;
-  height: 1.5px;
-  background: var(--ink);
-  position: relative;
-}
-
-.nav-toggle span::before,
-.nav-toggle span::after {
-  content: "";
-  position: absolute;
-  left: 0;
-}
-
-.nav-toggle span::before {
-  top: -6px;
-}
-
-.nav-toggle span::after {
-  top: 6px;
+  background: var(--white);
+  color: var(--forest);
+  flex: none;
+  margin-left: auto;
 }
 
 .drawer {
+  display: none;
+}
+
+.drawer:not([hidden]) {
   display: none;
 }
 
@@ -460,10 +458,11 @@ ul {
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   gap: 56px;
   align-items: center;
+  min-width: 0;
 }
 
 .hero h1 {
-  font-size: clamp(3.1rem, 6.6vw, 6.1rem);
+  font-size: clamp(2.15rem, 7.4vw, 6.1rem);
   margin: 18px 0 22px;
 }
 
@@ -560,6 +559,7 @@ ul {
   background: var(--cream);
   overflow: hidden;
   padding: 16px 0;
+  max-width: 100%;
 }
 
 .marquee-track {
@@ -655,6 +655,10 @@ ul {
   display: grid;
   grid-template-columns: 1.35fr 1fr 1fr;
   gap: 18px;
+}
+
+.service-grid.three {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .service-card {
@@ -971,8 +975,14 @@ ul {
   margin-bottom: 8px;
 }
 
+.naira {
+  font-family: system-ui, "Helvetica Neue", Arial, sans-serif;
+  font-style: normal;
+  font-weight: 650;
+}
+
 .amount {
-  font-family: var(--font-display);
+  font-family: var(--font-display), system-ui, "Helvetica Neue", sans-serif;
   font-size: 2.1rem;
   letter-spacing: -0.04em;
   margin: 10px 0 6px;
@@ -1142,9 +1152,9 @@ body.nav-open {
 }
 
 .page-hero h1 {
-  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-size: clamp(2.15rem, 7vw, 5.2rem);
   margin: 12px 0 16px;
-  max-width: 14ch;
+  max-width: min(14ch, 100%);
 }
 
 .crumbs {
@@ -1366,22 +1376,38 @@ body.nav-open {
 }
 
 .rate-table td:last-child {
-  font-family: var(--font-display);
+  font-family: var(--font-display), system-ui, "Helvetica Neue", sans-serif;
   font-size: 1.2rem;
   white-space: nowrap;
 }
 
+@media (max-width: 1100px) {
+  .condition-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 980px) {
   .nav,
-  .nav-cta .btn-ghost {
+  .nav-cta {
     display: none;
   }
 
-  .nav-toggle {
-    display: grid;
+  .nav-row {
+    position: relative;
+    padding-right: 52px;
   }
 
-  .drawer {
+  .nav-toggle {
+    display: grid !important;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 6;
+  }
+
+  .drawer:not([hidden]) {
     display: block;
     background: var(--white);
     border-bottom: 1px solid var(--line);
@@ -1407,6 +1433,7 @@ body.nav-open {
   .split,
   .split.reverse,
   .service-grid,
+  .service-grid.three,
   .bento,
   .process,
   .feature-band,
@@ -1486,8 +1513,10 @@ body.nav-open {
     min-height: 56px;
     display: grid;
     place-items: center;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 600;
+    white-space: nowrap;
+    padding: 0 6px;
   }
 
   .dock a:last-child {
@@ -1501,7 +1530,7 @@ body.nav-open {
 
 @media (max-width: 640px) {
   .wrap {
-    width: min(calc(100% - 28px), var(--max));
+    width: min(calc(100vw - 28px), var(--max));
   }
 
   .topbar .wrap {
@@ -1514,7 +1543,31 @@ body.nav-open {
 
   .hero h1,
   .page-hero h1 {
-    font-size: 2.7rem;
+    font-size: 2.2rem;
+    max-width: none;
+    line-height: 1.12;
+  }
+
+  .hero-float,
+  .badge {
+    display: none;
+  }
+
+  .hero-frame {
+    position: relative;
+    inset: auto;
+    height: 420px;
+    border-radius: 28px;
+  }
+
+  .hero-visual {
+    min-height: 0;
+  }
+
+  .hero-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
   }
 
   .hero-visual {
@@ -1540,12 +1593,21 @@ body.nav-open {
     min-height: 72px;
   }
 
-  .btn {
+  .actions,
+  .actions .btn,
+  form .btn {
     width: 100%;
   }
 
-  .actions {
-    width: 100%;
+  .topbar {
+    font-size: 0.72rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hero-visual {
+    min-height: 420px;
   }
 
   .hero-frame {
